@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
+  <link rel="icon" type="image/png" href="../assets/img/favicon.png">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <title>Gestión de Clientes - Sistema de Préstamos</title>
+  <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
+  <link href="../assets/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="../assets/css/paper-dashboard.css?v=2.0.1" rel="stylesheet" />
+  <link href="../assets/demo/demo.css" rel="stylesheet" />
+</head>
+<body class="">
+  <div class="wrapper ">
+    <div class="sidebar" data-color="white" data-active-color="danger">
+      <div class="logo">
+        <a href="#" class="simple-text logo-mini">
+          <div class="logo-image-small">
+            <img src="../assets/img/logo-small.png">
+          </div>
+        </a>
+        <a href="#" class="simple-text logo-normal">
+          Sistema de Préstamos
+        </a>
+      </div>
+      <div class="sidebar-wrapper">
+        <ul class="nav">
+          <li>
+            <a href="./dashboard.html">
+              <i class="nc-icon nc-bank"></i>
+              <p>Dashboard</p>
+            </a>
+          </li>
+          <li class="active">
+            <a href="./clients.html">
+              <i class="nc-icon nc-single-02"></i>
+              <p>Clientes</p>
+            </a>
+          </li>
+          <li>
+            <a href="./loans.html">
+              <i class="nc-icon nc-money-coins"></i>
+              <p>Préstamos</p>
+            </a>
+          </li>
+          <li>
+            <a href="./payments.html">
+              <i class="nc-icon nc-credit-card"></i>
+              <p>Pagos</p>
+            </a>
+          </li>
+          <li>
+            <a href="./history.html">
+              <i class="nc-icon nc-chart-bar-32"></i>
+              <p>Historial</p>
+            </a>
+          </li>
+          <li>
+            <a href="./transparency.html">
+              <i class="nc-icon nc-single-copy-04"></i>
+              <p>Transparencia</p>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="main-panel">
+      <nav class="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent">
+        <div class="container-fluid">
+          <div class="navbar-wrapper">
+            <div class="navbar-toggle">
+              <button type="button" class="navbar-toggler">
+                <span class="navbar-toggler-bar bar1"></span>
+                <span class="navbar-toggler-bar bar2"></span>
+                <span class="navbar-toggler-bar bar3"></span>
+              </button>
+            </div>
+            <a class="navbar-brand" href="javascript:;">Gestión de Clientes</a>
+          </div>
+          <div class="collapse navbar-collapse justify-content-end" id="navigation">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link btn-magnify" href="javascript:;" onclick="logout()">
+                  <i class="nc-icon nc-button-power"></i>
+                  <p>
+                    <span class="d-lg-none d-md-block">Logout</span>
+                  </p>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      <div class="content">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">
+                <h4 class="card-title">Lista de Clientes</h4>
+                <p class="card-category">Gestión completa de clientes registrados</p>
+                <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addClientModal">
+                  <i class="nc-icon nc-simple-add"></i> Agregar Cliente
+                </button>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-striped">
+                    <thead class="text-primary">
+                      <tr>
+                        <th>Nombre Completo</th>
+                        <th>Teléfono</th>
+                        <th>Email</th>
+                        <th>Dirección</th>
+                        <th>Fecha Registro</th>
+                        <th>Acciones</th>
+                      </tr>
+                    </thead>
+                    <tbody id="clientsTable">
+                      <tr>
+                        <td colspan="6" class="text-center">
+                          <div class="spinner-border" role="status">
+                            <span class="sr-only">Cargando...</span>
+                          </div>
+                          Cargando clientes...
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <footer class="footer footer-black footer-white">
+        <div class="container-fluid">
+          <div class="row">
+            <nav class="footer-nav">
+              <ul>
+                <li><a href="#" target="_blank">Sistema de Préstamos</a></li>
+              </ul>
+            </nav>
+            <div class="credits ml-auto">
+              <span class="copyright">
+                © <script>document.write(new Date().getFullYear())</script>, made with <i class="fa fa-heart heart"></i> by Creative Tim
+              </span>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Modal Agregar Cliente -->
+  <div class="modal fade" id="addClientModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Agregar Nuevo Cliente</h5>
+          <button type="button" class="close" data-dismiss="modal">
+            <span>&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="addClientForm">
+            <div class="form-group">
+              <label>Nombre</label>
+              <input type="text" class="form-control" id="clientNombre" required>
+            </div>
+            <div class="form-group">
+              <label>Apellido</label>
+              <input type="text" class="form-control" id="clientApellido" required>
+            </div>
+            <div class="form-group">
+              <label>Teléfono</label>
+              <input type="text" class="form-control" id="clientTelefono">
+            </div>
+            <div class="form-group">
+              <label>Email</label>
+              <input type="email" class="form-control" id="clientEmail">
+            </div>
+            <div class="form-group">
+              <label>Dirección</label>
+              <input type="text" class="form-control" id="clientDireccion">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary" id="saveClientBtn">Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../node_modules/perfect-scrollbar/dist/perfect-scrollbar.min.js"></script>
+  <script src="../assets/js/core/jquery.min.js"></script>
+  <script src="../assets/js/core/popper.min.js"></script>
+  <script src="../assets/js/core/bootstrap.min.js"></script>
+  <script src="../assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+  <script src="../assets/js/plugins/bootstrap-notify.js"></script>
+  <script src="../assets/js/paper-dashboard.min.js?v=2.0.1"></script>
+  <script>
+    $(document).ready(function() {
+      // Check authentication
+      const token = localStorage.getItem('token');
+      if (!token) {
+        window.location.href = './login.html';
+        return;
+      }
+
+      loadClients();
+
+      $('#saveClientBtn').on('click', function() {
+        const clientData = {
+          nombre: $('#clientNombre').val().trim(),
+          apellido: $('#clientApellido').val().trim(),
+          telefono: $('#clientTelefono').val().trim(),
+          email: $('#clientEmail').val().trim(),
+          direccion: $('#clientDireccion').val().trim()
+        };
+
+        if (!clientData.nombre || !clientData.apellido) {
+          alert('Nombre y apellido son requeridos');
+          return;
+        }
+
+        $.ajax({
+          url: '/api/admin/clients',
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${token}` },
+          contentType: 'application/json',
+          data: JSON.stringify(clientData),
+          success: function() {
+            $('#addClientModal').modal('hide');
+            $('#addClientForm')[0].reset();
+            loadClients();
+            showNotification('Cliente agregado exitosamente', 'success');
+          },
+          error: function() {
+            showNotification('Error al agregar cliente', 'danger');
+          }
+        });
+      });
+
+      function loadClients() {
+        $.ajax({
+          url: '/api/admin/clients',
+          method: 'GET',
+          headers: { 'Authorization': `Bearer ${token}` },
+          success: function(clients) {
+            const tbody = $('#clientsTable');
+            tbody.empty();
+
+            if (clients.length === 0) {
+              tbody.append('<tr><td colspan="6" class="text-center">No hay clientes registrados</td></tr>');
+              return;
+            }
+
+            clients.forEach(client => {
+              const fechaRegistro = new Date(client.fecha_registro || client.createdAt).toLocaleDateString();
+              tbody.append(`
+                <tr>
+                  <td>${client.nombre} ${client.apellido}</td>
+                  <td>${client.telefono || 'N/A'}</td>
+                  <td>${client.email || 'N/A'}</td>
+                  <td>${client.direccion || 'N/A'}</td>
+                  <td>${fechaRegistro}</td>
+                  <td>
+                    <button class="btn btn-sm btn-info" onclick="viewClient('${client._id}')">
+                      <i class="fa fa-eye"></i>
+                    </button>
+                    <button class="btn btn-sm btn-warning" onclick="editClient('${client._id}')">
+                      <i class="fa fa-edit"></i>
+                    </button>
+                  </td>
+                </tr>
+              `);
+            });
+          },
+          error: function() {
+            $('#clientsTable').html('<tr><td colspan="6" class="text-center text-danger">Error al cargar clientes</td></tr>');
+          }
+        });
+      }
+
+      window.viewClient = function(id) {
+        // Implementar vista detallada del cliente
+        alert('Vista detallada del cliente - ID: ' + id);
+      }
+
+      window.editClient = function(id) {
+        // Implementar edición del cliente
+        alert('Editar cliente - ID: ' + id);
+      }
+
+      window.logout = function() {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        window.location.href = './login.html';
+      }
+
+      function showNotification(message, type) {
+        $.notify({
+          message: message
+        }, {
+          type: type,
+          timer: 3000,
+          placement: {
+            from: 'top',
+            align: 'right'
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>

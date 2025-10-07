@@ -16,4 +16,4 @@ const loanSchema = new mongoose.Schema({
   total_a_pagar: { type: Number, default: function() { return this.capital_inicial; } } // will be calculated
 }, { timestamps: true });
 
-module.exports = mongoose.model('Loan', loanSchema);
+module.exports = mongoose.model('Loan', loanSchema, 'prestamos');

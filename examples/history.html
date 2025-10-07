@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
+  <link rel="icon" type="image/png" href="../assets/img/favicon.png">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <title>Historial de Clientes - Sistema de Préstamos</title>
+  <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
+  <link href="../assets/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="../assets/css/paper-dashboard.css?v=2.0.1" rel="stylesheet" />
+  <link href="../assets/demo/demo.css" rel="stylesheet" />
+</head>
+<body class="">
+  <div class="wrapper ">
+    <div class="sidebar" data-color="white" data-active-color="danger">
+      <div class="logo">
+        <a href="#" class="simple-text logo-mini">
+          <div class="logo-image-small">
+            <img src="../assets/img/logo-small.png">
+          </div>
+        </a>
+        <a href="#" class="simple-text logo-normal">
+          Sistema de Préstamos
+        </a>
+      </div>
+      <div class="sidebar-wrapper">
+        <ul class="nav">
+          <li>
+            <a href="./dashboard.html">
+              <i class="nc-icon nc-bank"></i>
+              <p>Dashboard</p>
+            </a>
+          </li>
+          <li>
+            <a href="./clients.html">
+              <i class="nc-icon nc-single-02"></i>
+              <p>Clientes</p>
+            </a>
+          </li>
+          <li>
+            <a href="./loans.html">
+              <i class="nc-icon nc-money-coins"></i>
+              <p>Préstamos</p>
+            </a>
+          </li>
+          <li>
+            <a href="./payments.html">
+              <i class="nc-icon nc-credit-card"></i>
+              <p>Pagos</p>
+            </a>
+          </li>
+          <li class="active">
+            <a href="./history.html">
+              <i class="nc-icon nc-chart-bar-32"></i>
+              <p>Historial</p>
+            </a>
+          </li>
+          <li>
+            <a href="./transparency.html">
+              <i class="nc-icon nc-single-copy-04"></i>
+              <p>Transparencia</p>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="main-panel">
+      <nav class="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent">
+        <div class="container-fluid">
+          <div class="navbar-wrapper">
+            <div class="navbar-toggle">
+              <button type="button" class="navbar-toggler">
+                <span class="navbar-toggler-bar bar1"></span>
+                <span class="navbar-toggler-bar bar2"></span>
+                <span class="navbar-toggler-bar bar3"></span>
+              </button>
+            </div>
+            <a class="navbar-brand" href="javascript:;">Historial de Clientes</a>
+          </div>
+          <div class="collapse navbar-collapse justify-content-end" id="navigation">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link btn-magnify" href="javascript:;" onclick="logout()">
+                  <i class="nc-icon nc-button-power"></i>
+                  <p>
+                    <span class="d-lg-none d-md-block">Logout</span>
+                  </p>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      <div class="content">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">
+                <h4 class="card-title">Historial Completo de Clientes</h4>
+                <p class="card-category">Vista detallada de todos los clientes y sus actividades</p>
+                <div class="form-inline">
+                  <input type="text" class="form-control mr-2" id="searchInput" placeholder="Buscar cliente...">
+                  <select class="form-control" id="statusFilter">
+                    <option value="">Todos los estados</option>
+                    <option value="activo">Préstamos Activos</option>
+                    <option value="pagado">Préstamos Pagados</option>
+                    <option value="atrasado">Préstamos Atrasados</option>
+                  </select>
+                </div>
+              </div>
+              <div class="card-body">
+                <div id="clientHistoryContainer">
+                  <!-- Client history will be loaded here -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <footer class="footer footer-black footer-white">
+        <div class="container-fluid">
+          <div class="row">
+            <nav class="footer-nav">
+              <ul>
+                <li><a href="#" target="_blank">Sistema de Préstamos</a></li>
+              </ul>
+            </nav>
+            <div class="credits ml-auto">
+              <span class="copyright">
+                © <script>document.write(new Date().getFullYear())</script>, made with <i class="fa fa-heart heart"></i> by Creative Tim
+              </span>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <script src="../node_modules/perfect-scrollbar/dist/perfect-scrollbar.min.js"></script>
+  <script src="../assets/js/core/jquery.min.js"></script>
+  <script src="../assets/js/core/popper.min.js"></script>
+  <script src="../assets/js/core/bootstrap.min.js"></script>
+  <script src="../assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+  <script src="../assets/js/plugins/bootstrap-notify.js"></script>
+  <script src="../assets/js/paper-dashboard.min.js?v=2.0.1"></script>
+  <script>
+    $(document).ready(function() {
+      // Check authentication
+      const token = localStorage.getItem('token');
+      if (!token) {
+        window.location.href = './login.html';
+        return;
+      }
+
+      loadClientHistory();
+
+      $('#searchInput').on('input', function() {
+        filterClients();
+      });
+
+      $('#statusFilter').on('change', function() {
+        filterClients();
+      });
+
+      function loadClientHistory() {
+        // Load clients with their loans and payments
+        $.ajax({
+          url: '/api/admin/clients',
+          method: 'GET',
+          headers: { 'Authorization': `Bearer ${token}` },
+          success: function(clients) {
+            const container = $('#clientHistoryContainer');
+            container.empty();
+
+            if (clients.length === 0) {
+              container.append('<div class="text-center">No hay clientes registrados</div>');
+              return;
+            }
+
+            // Load loans and payments for each client
+            const promises = clients.map(client => loadClientDetails(client));
+
+            Promise.all(promises).then(clientDetails => {
+              clientDetails.forEach(clientData => {
+                container.append(createClientCard(clientData));
+              });
+            });
+          },
+          error: function() {
+            $('#clientHistoryContainer').html('<div class="text-center text-danger">Error al cargar historial de clientes</div>');
+          }
+        });
+      }
+
+      function loadClientDetails(client) {
+        return new Promise((resolve) => {
+          // Load client's loans
+          $.ajax({
+            url: '/api/admin/loans',
+            method: 'GET',
+            headers: { 'Authorization': `Bearer ${token}` },
+            success: function(loans) {
+              const clientLoans = loans.filter(loan => loan.cliente_id._id === client._id);
+
+              // Load payments for client's loans
+              const loanIds = clientLoans.map(loan => loan._id);
+              $.ajax({
+                url: '/api/admin/payments',
+                method: 'GET',
+                headers: { 'Authorization': `Bearer ${token}` },
+                success: function(payments) {
+                  const clientPayments = payments.filter(payment =>
+                    loanIds.includes(payment.prestamo_id._id)
+                  );
+
+                  resolve({
+                    client: client,
+                    loans: clientLoans,
+                    payments: clientPayments
+                  });
+                }
+              });
+            }
+          });
+        });
+      }
+
+      function createClientCard(clientData) {
+        const { client, loans, payments } = clientData;
+
+        const totalLoans = loans.length;
+        const activeLoans = loans.filter(l => l.estado === 'activo').length;
+        const paidLoans = loans.filter(l => l.estado === 'pagado').length;
+        const overdueLoans = loans.filter(l => l.estado === 'atrasado').length;
+
+        const totalBorrowed = loans.reduce((sum, l) => sum + l.capital_inicial, 0);
+        const totalPaid = payments.reduce((sum, p) => sum + p.monto, 0);
+        const outstandingBalance = loans.reduce((sum, l) => sum + l.saldo_actual, 0);
+
+        let statusClass = 'success';
+        if (overdueLoans > 0) statusClass = 'danger';
+        else if (activeLoans > 0) statusClass = 'warning';
+
+        return `
+          <div class="card client-card mb-3" data-client-name="${client.nombre} ${client.apellido}" data-status="${overdueLoans > 0 ? 'atrasado' : activeLoans > 0 ? 'activo' : 'pagado'}">
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                ${client.nombre} ${client.apellido}
+                <span class="badge badge-${statusClass} float-right">${overdueLoans > 0 ? 'Con Atrasos' : activeLoans > 0 ? 'Activo' : 'Al Día'}</span>
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-3">
+                  <div class="contact-info">
+                    <p><strong>Teléfono:</strong> ${client.telefono || 'N/A'}</p>
+                    <p><strong>Email:</strong> ${client.email || 'N/A'}</p>
+                    <p><strong>Dirección:</strong> ${client.direccion || 'N/A'}</p>
+                    <p><strong>Fecha Registro:</strong> ${new Date(client.fecha_registro || client.createdAt).toLocaleDateString()}</p>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="loan-summary">
+                    <h6>Resumen de Préstamos</h6>
+                    <p><strong>Total Préstamos:</strong> ${totalLoans}</p>
+                    <p><strong>Activos:</strong> <span class="text-warning">${activeLoans}</span></p>
+                    <p><strong>Pagados:</strong> <span class="text-success">${paidLoans}</span></p>
+                    <p><strong>Atrasados:</strong> <span class="text-danger">${overdueLoans}</span></p>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="financial-summary">
+                    <h6>Resumen Financiero</h6>
+                    <p><strong>Total Prestado:</strong> $${totalBorrowed.toLocaleString()}</p>
+                    <p><strong>Total Pagado:</strong> $${totalPaid.toLocaleString()}</p>
+                    <p><strong>Saldo Pendiente:</strong> $${outstandingBalance.toLocaleString()}</p>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="recent-activity">
+                    <h6>Actividad Reciente</h6>
+                    ${payments.slice(0, 3).map(payment => `
+                      <p class="small">
+                        Pago: $${payment.monto.toLocaleString()}<br>
+                        <small class="text-muted">${new Date(payment.fecha).toLocaleDateString()}</small>
+                      </p>
+                    `).join('') || '<p class="text-muted small">Sin pagos recientes</p>'}
+                  </div>
+                </div>
+              </div>
+              ${loans.length > 0 ? `
+                <div class="loans-detail mt-3">
+                  <h6>Detalle de Préstamos</h6>
+                  <div class="table-responsive">
+                    <table class="table table-sm">
+                      <thead>
+                        <tr>
+                          <th>Capital</th>
+                          <th>Saldo Actual</th>
+                          <th>Tasa</th>
+                          <th>Estado</th>
+                          <th>Fecha</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        ${loans.map(loan => `
+                          <tr>
+                            <td>$${loan.capital_inicial.toLocaleString()}</td>
+                            <td>$${loan.saldo_actual.toLocaleString()}</td>
+                            <td>${loan.tasa_interes}%</td>
+                            <td><span class="badge badge-${getStatusClass(loan.estado)}">${loan.estado}</span></td>
+                            <td>${new Date(loan.fecha_otorgamiento || loan.createdAt).toLocaleDateString()}</td>
+                          </tr>
+                        `).join('')}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              ` : ''}
+            </div>
+          </div>
+        `;
+      }
+
+      function getStatusClass(status) {
+        switch(status) {
+          case 'activo': return 'warning';
+          case 'pagado': return 'success';
+          case 'atrasado': return 'danger';
+          default: return 'secondary';
+        }
+      }
+
+      function filterClients() {
+        const searchTerm = $('#searchInput').val().toLowerCase();
+        const statusFilter = $('#statusFilter').val();
+
+        $('.client-card').each(function() {
+          const card = $(this);
+          const clientName = card.data('client-name').toLowerCase();
+          const clientStatus = card.data('status');
+
+          const matchesSearch = clientName.includes(searchTerm);
+          const matchesStatus = !statusFilter || clientStatus === statusFilter;
+
+          if (matchesSearch && matchesStatus) {
+            card.show();
+          } else {
+            card.hide();
+          }
+        });
+      }
+
+      window.logout = function() {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        window.location.href = './login.html';
+      }
+    });
+  </script>
+</body>
+</html>

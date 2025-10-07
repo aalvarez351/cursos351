@@ -12,4 +12,4 @@ const paymentSchema = new mongoose.Schema({
   aplicado_capital: { type: Number, default: 0 }
 }, { timestamps: true });
 
-module.exports = mongoose.model('Payment', paymentSchema);
+module.exports = mongoose.model('Payment', paymentSchema, 'pagos');

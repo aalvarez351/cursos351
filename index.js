@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const User = require('./models/User');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -10,8 +11,26 @@ const PORT = process.env.PORT || 3000;
 mongoose.connect('mongodb+srv://aalvarez351:Lentesdesol@ianube.furqsl0.mongodb.net/?retryWrites=true&w=majority&appName=ianube', {
   useNewUrlParser: true,
   useUnifiedTopology: true
-}).then(() => console.log('MongoDB connected'))
-  .catch(err => console.log(err));
+}).then(async () => {
+  console.log('MongoDB connected');
+
+  // Create default admin user if it doesn't exist
+  try {
+    const adminExists = await User.findOne({ username: 'admin' });
+    if (!adminExists) {
+      const admin = new User({
+        username: 'admin',
+        password: 'admin123',
+        role: 'admin'
+      });
+      await admin.save();
+      console.log('Default admin user created: username: admin, password: admin123');
+    }
+  } catch (err) {
+    console.log('Error creating default admin:', err);
+  }
+})
+.catch(err => console.log(err));
 
 // Middleware
 app.use(cors());
@@ -26,9 +45,9 @@ app.use('/api/client', require('./routes/client'));
 // Serve static files from the root directory
 app.use(express.static(path.join(__dirname)));
 
-// Serve the dashboard as the main page
+// Serve the login page as the main page
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'examples', 'dashboard.html'));
+  res.sendFile(path.join(__dirname, 'examples', 'login.html'));
 });
 
 app.listen(PORT, () => {

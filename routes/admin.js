@@ -82,7 +82,9 @@ router.post('/loans', async (req, res) => {
 // Payments CRUD
 router.get('/payments', async (req, res) => {
   try {
-    const payments = await Payment.find().populate('prestamo_id').populate('registrado_por');
+    const payments = await Payment.find()
+      .populate('prestamo_id')
+      .populate('registrado_por', 'username'); // Only populate username field
     res.send(payments);
   } catch (e) {
     res.status(500).send(e);

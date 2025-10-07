@@ -57,21 +57,27 @@ Coded by www.creative-tim.com
             </a>
           </li>
           <li>
-            <a href="#clients">
+            <a href="./clients.html">
               <i class="nc-icon nc-single-02"></i>
               <p>Clientes</p>
             </a>
           </li>
           <li>
-            <a href="#loans">
+            <a href="./loans.html">
               <i class="nc-icon nc-money-coins"></i>
               <p>Préstamos</p>
             </a>
           </li>
           <li>
-            <a href="#payments">
+            <a href="./payments.html">
               <i class="nc-icon nc-credit-card"></i>
               <p>Pagos</p>
+            </a>
+          </li>
+          <li>
+            <a href="./history.html">
+              <i class="nc-icon nc-chart-bar-32"></i>
+              <p>Historial</p>
             </a>
           </li>
           <li>
@@ -115,31 +121,10 @@ Coded by www.creative-tim.com
             </form>
             <ul class="navbar-nav">
               <li class="nav-item">
-                <a class="nav-link btn-magnify" href="javascript:;">
-                  <i class="nc-icon nc-layout-11"></i>
+                <a class="nav-link btn-magnify" href="javascript:;" onclick="logout()">
+                  <i class="nc-icon nc-button-power"></i>
                   <p>
-                    <span class="d-lg-none d-md-block">Stats</span>
-                  </p>
-                </a>
-              </li>
-              <li class="nav-item btn-rotate dropdown">
-                <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <i class="nc-icon nc-bell-55"></i>
-                  <p>
-                    <span class="d-lg-none d-md-block">Some Actions</span>
-                  </p>
-                </a>
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                  <a class="dropdown-item" href="#">Action</a>
-                  <a class="dropdown-item" href="#">Another action</a>
-                  <a class="dropdown-item" href="#">Something else here</a>
-                </div>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link btn-rotate" href="javascript:;">
-                  <i class="nc-icon nc-settings-gear-65"></i>
-                  <p>
-                    <span class="d-lg-none d-md-block">Account</span>
+                    <span class="d-lg-none d-md-block">Logout</span>
                   </p>
                 </a>
               </li>
@@ -359,23 +344,146 @@ Coded by www.creative-tim.com
     </div>
   </div>
   <!--   Core JS Files   -->
+  <script src="../node_modules/perfect-scrollbar/dist/perfect-scrollbar.min.js"></script>
   <script src="../assets/js/core/jquery.min.js"></script>
   <script src="../assets/js/core/popper.min.js"></script>
   <script src="../assets/js/core/bootstrap.min.js"></script>
   <script src="../assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
-  <!--  Google Maps Plugin    -->
-  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
-  <!-- Chart JS -->
-  <script src="../assets/js/plugins/chartjs.min.js"></script>
   <!--  Notifications Plugin    -->
   <script src="../assets/js/plugins/bootstrap-notify.js"></script>
   <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
-  <script src="../assets/js/paper-dashboard.min.js?v=2.0.1" type="text/javascript"></script><!-- Paper Dashboard DEMO methods, don't include it in your project! -->
-  <script src="../assets/demo/demo.js"></script>
+  <script src="../assets/js/paper-dashboard.min.js?v=2.0.1" type="text/javascript"></script>
   <script>
     $(document).ready(function() {
-      // Javascript method's body can be found in assets/assets-for-demo/js/demo.js
-      demo.initChartsPages();
+      // Check authentication
+      const token = localStorage.getItem('token');
+      if (!token) {
+        window.location.href = './login.html';
+        return;
+      }
+
+      // Load data
+      loadStats();
+      loadClients();
+      loadLoans();
+      loadPayments();
+
+      function loadStats() {
+        // Load clients count
+        $.ajax({
+          url: '/api/admin/clients',
+          method: 'GET',
+          headers: { 'Authorization': `Bearer ${token}` },
+          success: function(clients) {
+            $('#totalClientes').text(clients.length);
+          }
+        });
+
+        // Load loans count and total amount
+        $.ajax({
+          url: '/api/admin/loans',
+          method: 'GET',
+          headers: { 'Authorization': `Bearer ${token}` },
+          success: function(loans) {
+            $('#totalPrestamos').text(loans.length);
+            const totalAmount = loans.reduce((sum, loan) => sum + loan.capital_inicial, 0);
+            $('#montoTotal').text('$' + totalAmount.toLocaleString());
+          }
+        });
+
+        // Load payments count
+        $.ajax({
+          url: '/api/admin/payments',
+          method: 'GET',
+          headers: { 'Authorization': `Bearer ${token}` },
+          success: function(payments) {
+            $('#totalPagos').text(payments.length);
+          }
+        });
+      }
+
+      function loadClients() {
+        $.ajax({
+          url: '/api/admin/clients',
+          method: 'GET',
+          headers: { 'Authorization': `Bearer ${token}` },
+          success: function(clients) {
+            const tbody = $('#clientsTable');
+            tbody.empty();
+            clients.slice(0, 5).forEach(client => {
+              tbody.append(`
+                <tr>
+                  <td>${client.nombre} ${client.apellido}</td>
+                  <td>${client.telefono}</td>
+                  <td>${client.email}</td>
+                </tr>
+              `);
+            });
+          }
+        });
+      }
+
+      function loadLoans() {
+        $.ajax({
+          url: '/api/admin/loans',
+          method: 'GET',
+          headers: { 'Authorization': `Bearer ${token}` },
+          success: function(loans) {
+            const tbody = $('#loansTable');
+            tbody.empty();
+            loans.slice(0, 5).forEach(loan => {
+              tbody.append(`
+                <tr>
+                  <td>${loan.cliente_id.nombre} ${loan.cliente_id.apellido}</td>
+                  <td>$${loan.capital_inicial.toLocaleString()}</td>
+                  <td>${loan.plazo}</td>
+                  <td>${loan.tasa_interes}%</td>
+                  <td><span class="badge badge-${getStatusColor(loan.estado)}">${loan.estado}</span></td>
+                  <td>
+                    <button class="btn btn-sm btn-info">Ver</button>
+                  </td>
+                </tr>
+              `);
+            });
+          }
+        });
+      }
+
+      function loadPayments() {
+        $.ajax({
+          url: '/api/admin/payments',
+          method: 'GET',
+          headers: { 'Authorization': `Bearer ${token}` },
+          success: function(payments) {
+            const tbody = $('#paymentsTable');
+            tbody.empty();
+            payments.slice(0, 5).forEach(payment => {
+              tbody.append(`
+                <tr>
+                  <td>${payment.prestamo_id.cliente_id.nombre} ${payment.prestamo_id.cliente_id.apellido}</td>
+                  <td>$${payment.monto.toLocaleString()}</td>
+                  <td>${new Date(payment.fecha).toLocaleDateString()}</td>
+                </tr>
+              `);
+            });
+          }
+        });
+      }
+
+      function getStatusColor(status) {
+        switch(status) {
+          case 'activo': return 'success';
+          case 'pagado': return 'primary';
+          case 'atrasado': return 'danger';
+          default: return 'secondary';
+        }
+      }
+
+      window.logout = function() {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        window.location.href = './login.html';
+      }
     });
   </script>
 </body>
