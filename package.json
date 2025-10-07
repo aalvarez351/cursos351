@@ -5,6 +5,10 @@
   "homepage": "http://creative-tim.com/product/paper-dashboard-2",
   "author": "Creative Tim",
   "license": "Creative Tim License <www.creative-tim.com/license>",
+  "scripts": {
+    "start": "node index.js",
+    "build": "gulp compile-scss"
+  },
   "devDependencies": {
     "gulp": "^4.0.2",
     "gulp-autoprefixer": "^6.1.0",
@@ -15,6 +19,7 @@
     "gulp-sourcemaps": "^2.6.5"
   },
   "dependencies": {
+    "express": "^5.1.0",
     "sass": "^1.93.2"
   }
 }
