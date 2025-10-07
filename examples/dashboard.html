@@ -362,14 +362,31 @@ Coded by www.creative-tim.com
         return;
       }
 
-      // Load data
+      // Load all data efficiently
       loadStats();
-      loadClients();
-      loadLoans();
-      loadPayments();
+      loadDashboardData();
 
       function loadStats() {
-        // Load clients count
+        // Load all stats in a single efficient request
+        $.ajax({
+          url: '/api/admin/dashboard-stats',
+          method: 'GET',
+          headers: { 'Authorization': `Bearer ${token}` },
+          success: function(stats) {
+            $('#totalClientes').text(stats.totalClientes);
+            $('#totalPrestamos').text(stats.totalPrestamos);
+            $('#totalPagos').text(stats.totalPagos);
+            $('#montoTotal').text('$' + stats.montoTotal.toLocaleString());
+          },
+          error: function() {
+            // Fallback to individual requests if the optimized endpoint fails
+            loadStatsFallback();
+          }
+        });
+      }
+
+      function loadStatsFallback() {
+        // Original implementation as fallback
         $.ajax({
           url: '/api/admin/clients',
           method: 'GET',
@@ -379,7 +396,6 @@ Coded by www.creative-tim.com
           }
         });
 
-        // Load loans count and total amount
         $.ajax({
           url: '/api/admin/loans',
           method: 'GET',
@@ -391,7 +407,6 @@ Coded by www.creative-tim.com
           }
         });
 
-        // Load payments count
         $.ajax({
           url: '/api/admin/payments',
           method: 'GET',
@@ -402,7 +417,67 @@ Coded by www.creative-tim.com
         });
       }
 
-      function loadClients() {
+      function loadDashboardData() {
+        // Load recent clients, loans, and payments in a single efficient request
+        $.ajax({
+          url: '/api/admin/dashboard-data',
+          method: 'GET',
+          headers: { 'Authorization': `Bearer ${token}` },
+          success: function(data) {
+            // Load recent clients
+            const clientsTbody = $('#clientsTable');
+            clientsTbody.empty();
+            data.clients.forEach(client => {
+              clientsTbody.append(`
+                <tr>
+                  <td>${client.nombre} ${client.apellido}</td>
+                  <td>${client.telefono}</td>
+                  <td>${client.email}</td>
+                </tr>
+              `);
+            });
+
+            // Load recent loans
+            const loansTbody = $('#loansTable');
+            loansTbody.empty();
+            data.loans.forEach(loan => {
+              loansTbody.append(`
+                <tr>
+                  <td>${loan.cliente_id.nombre} ${loan.cliente_id.apellido}</td>
+                  <td>$${loan.capital_inicial.toLocaleString()}</td>
+                  <td>${loan.plazo}</td>
+                  <td>${loan.tasa_interes}%</td>
+                  <td><span class="badge badge-${getStatusColor(loan.estado)}">${loan.estado}</span></td>
+                  <td>
+                    <button class="btn btn-sm btn-info">Ver</button>
+                  </td>
+                </tr>
+              `);
+            });
+
+            // Load recent payments
+            const paymentsTbody = $('#paymentsTable');
+            paymentsTbody.empty();
+            data.payments.forEach(payment => {
+              paymentsTbody.append(`
+                <tr>
+                  <td>${payment.prestamo_id.cliente_id.nombre} ${payment.prestamo_id.cliente_id.apellido}</td>
+                  <td>$${payment.monto.toLocaleString()}</td>
+                  <td>${new Date(payment.fecha).toLocaleDateString()}</td>
+                </tr>
+              `);
+            });
+          },
+          error: function() {
+            // Fallback to individual requests if optimized endpoint fails
+            loadClientsFallback();
+            loadLoansFallback();
+            loadPaymentsFallback();
+          }
+        });
+      }
+
+      function loadClientsFallback() {
         $.ajax({
           url: '/api/admin/clients',
           method: 'GET',
@@ -423,7 +498,7 @@ Coded by www.creative-tim.com
         });
       }
 
-      function loadLoans() {
+      function loadLoansFallback() {
         $.ajax({
           url: '/api/admin/loans',
           method: 'GET',
@@ -449,7 +524,7 @@ Coded by www.creative-tim.com
         });
       }
 
-      function loadPayments() {
+      function loadPaymentsFallback() {
         $.ajax({
           url: '/api/admin/payments',
           method: 'GET',

@@ -166,4 +166,132 @@ router.get('/client-history', auth, adminAuth, async (req, res) => {
   }
 });
 
+// Get dashboard statistics in a single efficient request
+router.get('/dashboard-stats', auth, adminAuth, async (req, res) => {
+  try {
+    // Get all stats in parallel for better performance
+    const [clientsCount, loansData, paymentsCount] = await Promise.all([
+      Client.countDocuments(),
+      Loan.aggregate([
+        { $group: { _id: null, count: { $sum: 1 }, totalAmount: { $sum: '$capital_inicial' } } }
+      ]),
+      Payment.countDocuments()
+    ]);
+
+    const loansCount = loansData[0]?.count || 0;
+    const totalAmount = loansData[0]?.totalAmount || 0;
+
+    res.send({
+      totalClientes: clientsCount,
+      totalPrestamos: loansCount,
+      totalPagos: paymentsCount,
+      montoTotal: totalAmount
+    });
+  } catch (e) {
+    res.status(500).send(e);
+  }
+});
+
+// Get dashboard data (recent items with limits)
+router.get('/dashboard-data', auth, adminAuth, async (req, res) => {
+  try {
+    const [recentClients, recentLoans, recentPayments] = await Promise.all([
+      Client.find().sort({ createdAt: -1 }).limit(5),
+      Loan.find().populate('cliente_id', 'nombre apellido').sort({ createdAt: -1 }).limit(5),
+      Payment.find().populate('prestamo_id', 'cliente_id').sort({ createdAt: -1 }).limit(5)
+    ]);
+
+    res.send({
+      clients: recentClients,
+      loans: recentLoans,
+      payments: recentPayments
+    });
+  } catch (e) {
+    res.status(500).send(e);
+  }
+});
+
+// Get paginated clients
+router.get('/clients-paginated', auth, adminAuth, async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+
+    const [clients, total] = await Promise.all([
+      Client.find().sort({ createdAt: -1 }).skip(skip).limit(limit),
+      Client.countDocuments()
+    ]);
+
+    res.send({
+      clients,
+      pagination: {
+        page,
+        limit,
+        total,
+        pages: Math.ceil(total / limit)
+      }
+    });
+  } catch (e) {
+    res.status(500).send(e);
+  }
+});
+
+// Get paginated loans
+router.get('/loans-paginated', auth, adminAuth, async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+
+    const [loans, total] = await Promise.all([
+      Loan.find().populate('cliente_id', 'nombre apellido').sort({ createdAt: -1 }).skip(skip).limit(limit),
+      Loan.countDocuments()
+    ]);
+
+    res.send({
+      loans,
+      pagination: {
+        page,
+        limit,
+        total,
+        pages: Math.ceil(total / limit)
+      }
+    });
+  } catch (e) {
+    res.status(500).send(e);
+  }
+});
+
+// Get paginated payments
+router.get('/payments-paginated', auth, adminAuth, async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+
+    const [payments, total] = await Promise.all([
+      Payment.find()
+        .populate('prestamo_id', 'cliente_id')
+        .populate('registrado_por', 'username')
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit),
+      Payment.countDocuments()
+    ]);
+
+    res.send({
+      payments,
+      pagination: {
+        page,
+        limit,
+        total,
+        pages: Math.ceil(total / limit)
+      }
+    });
+  } catch (e) {
+    res.status(500).send(e);
+  }
+});
+
 module.exports = router;
