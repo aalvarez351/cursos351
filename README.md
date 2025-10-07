@@ -17,11 +17,6 @@ npm install
 npm start
 ```
 
-## Acceso
-
-- URL: http://localhost:3000
-- Usuario Admin: admin / admin123
-
 ## Tecnologías
 
 - Node.js + Express
