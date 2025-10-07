@@ -166,65 +166,28 @@
       });
 
       function loadClientHistory() {
-        // Load clients with their loans and payments
+        // Load clients with their loans and payments in a single efficient request
         $.ajax({
-          url: '/api/admin/clients',
+          url: '/api/admin/client-history',
           method: 'GET',
           headers: { 'Authorization': `Bearer ${token}` },
-          success: function(clients) {
+          success: function(clientHistory) {
             const container = $('#clientHistoryContainer');
             container.empty();
 
-            if (clients.length === 0) {
+            if (clientHistory.length === 0) {
               container.append('<div class="text-center">No hay clientes registrados</div>');
               return;
             }
 
-            // Load loans and payments for each client
-            const promises = clients.map(client => loadClientDetails(client));
-
-            Promise.all(promises).then(clientDetails => {
-              clientDetails.forEach(clientData => {
-                container.append(createClientCard(clientData));
-              });
+            // Display all client data
+            clientHistory.forEach(clientData => {
+              container.append(createClientCard(clientData));
             });
           },
           error: function() {
             $('#clientHistoryContainer').html('<div class="text-center text-danger">Error al cargar historial de clientes</div>');
           }
-        });
-      }
-
-      function loadClientDetails(client) {
-        return new Promise((resolve) => {
-          // Load client's loans
-          $.ajax({
-            url: '/api/admin/loans',
-            method: 'GET',
-            headers: { 'Authorization': `Bearer ${token}` },
-            success: function(loans) {
-              const clientLoans = loans.filter(loan => loan.cliente_id._id === client._id);
-
-              // Load payments for client's loans
-              const loanIds = clientLoans.map(loan => loan._id);
-              $.ajax({
-                url: '/api/admin/payments',
-                method: 'GET',
-                headers: { 'Authorization': `Bearer ${token}` },
-                success: function(payments) {
-                  const clientPayments = payments.filter(payment =>
-                    loanIds.includes(payment.prestamo_id._id)
-                  );
-
-                  resolve({
-                    client: client,
-                    loans: clientLoans,
-                    payments: clientPayments
-                  });
-                }
-              });
-            }
-          });
         });
       }
 

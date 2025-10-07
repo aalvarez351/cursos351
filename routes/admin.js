@@ -122,4 +122,48 @@ router.post('/payments', async (req, res) => {
   }
 });
 
+// Get client history with loans and payments
+router.get('/client-history', auth, adminAuth, async (req, res) => {
+  try {
+    const limit = parseInt(req.query.limit) || 50; // Limit to prevent resource exhaustion
+    const skip = parseInt(req.query.skip) || 0;
+
+    // Get clients with pagination
+    const clients = await Client.find()
+      .limit(limit)
+      .skip(skip)
+      .sort({ createdAt: -1 });
+
+    if (clients.length === 0) {
+      return res.send([]);
+    }
+
+    // Get all loans for these clients in one query
+    const clientIds = clients.map(c => c._id);
+    const loans = await Loan.find({ cliente_id: { $in: clientIds } });
+
+    // Get all payments for these clients' loans in one query
+    const loanIds = loans.map(l => l._id);
+    const payments = await Payment.find({ prestamo_id: { $in: loanIds } })
+      .populate('registrado_por', 'username');
+
+    // Group data by client
+    const clientHistory = clients.map(client => {
+      const clientLoans = loans.filter(loan => loan.cliente_id.toString() === client._id.toString());
+      const clientLoanIds = clientLoans.map(l => l._id.toString());
+      const clientPayments = payments.filter(payment => clientLoanIds.includes(payment.prestamo_id.toString()));
+
+      return {
+        client,
+        loans: clientLoans,
+        payments: clientPayments
+      };
+    });
+
+    res.send(clientHistory);
+  } catch (e) {
+    res.status(500).send(e);
+  }
+});
+
 module.exports = router;
