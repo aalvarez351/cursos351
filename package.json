@@ -1,6 +1,6 @@
 {
-  "name": "paper-dashboard-2",
-  "description": "Bootstrap 4 Paper Design",
+  "name": "sistema-prestamos",
+  "description": "Sistema de Préstamos con Transparencia Total",
   "version": "2.0.1",
   "homepage": "http://creative-tim.com/product/paper-dashboard-2",
   "author": "Creative Tim",
@@ -19,7 +19,11 @@
     "gulp-sourcemaps": "^2.6.5"
   },
   "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
     "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.19.1",
     "sass": "^1.93.2"
   }
 }

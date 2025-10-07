@@ -44,61 +44,40 @@ Coded by www.creative-tim.com
           </div>
           <!-- <p>CT</p> -->
         </a>
-        <a href="https://www.creative-tim.com" class="simple-text logo-normal">
-          Creative Tim
-          <!-- <div class="logo-image-big">
-            <img src="../assets/img/logo-big.png">
-          </div> -->
+        <a href="#" class="simple-text logo-normal">
+          Sistema de Préstamos
         </a>
       </div>
       <div class="sidebar-wrapper">
         <ul class="nav">
-          <li class="active ">
+          <li class="active">
             <a href="./dashboard.html">
               <i class="nc-icon nc-bank"></i>
               <p>Dashboard</p>
             </a>
           </li>
           <li>
-            <a href="./icons.html">
-              <i class="nc-icon nc-diamond"></i>
-              <p>Icons</p>
-            </a>
-          </li>
-          <li>
-            <a href="./map.html">
-              <i class="nc-icon nc-pin-3"></i>
-              <p>Maps</p>
-            </a>
-          </li>
-          <li>
-            <a href="./notifications.html">
-              <i class="nc-icon nc-bell-55"></i>
-              <p>Notifications</p>
-            </a>
-          </li>
-          <li>
-            <a href="./user.html">
+            <a href="#clients">
               <i class="nc-icon nc-single-02"></i>
-              <p>User Profile</p>
+              <p>Clientes</p>
             </a>
           </li>
           <li>
-            <a href="./tables.html">
-              <i class="nc-icon nc-tile-56"></i>
-              <p>Table List</p>
+            <a href="#loans">
+              <i class="nc-icon nc-money-coins"></i>
+              <p>Préstamos</p>
             </a>
           </li>
           <li>
-            <a href="./typography.html">
-              <i class="nc-icon nc-caps-small"></i>
-              <p>Typography</p>
+            <a href="#payments">
+              <i class="nc-icon nc-credit-card"></i>
+              <p>Pagos</p>
             </a>
           </li>
-          <li class="active-pro">
-            <a href="./upgrade.html">
-              <i class="nc-icon nc-spaceship"></i>
-              <p>Upgrade to PRO</p>
+          <li>
+            <a href="./transparency.html">
+              <i class="nc-icon nc-single-copy-04"></i>
+              <p>Transparencia</p>
             </a>
           </li>
         </ul>
@@ -116,7 +95,7 @@ Coded by www.creative-tim.com
                 <span class="navbar-toggler-bar bar3"></span>
               </button>
             </div>
-            <a class="navbar-brand" href="javascript:;">Paper Dashboard 2</a>
+            <a class="navbar-brand" href="javascript:;">Portal Administrador</a>
           </div>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-bar navbar-kebab"></span>
@@ -177,13 +156,13 @@ Coded by www.creative-tim.com
                 <div class="row">
                   <div class="col-5 col-md-4">
                     <div class="icon-big text-center icon-warning">
-                      <i class="nc-icon nc-globe text-warning"></i>
+                      <i class="nc-icon nc-single-02 text-primary"></i>
                     </div>
                   </div>
                   <div class="col-7 col-md-8">
                     <div class="numbers">
-                      <p class="card-category">Capacity</p>
-                      <p class="card-title">150GB<p>
+                      <p class="card-category">Total Clientes</p>
+                      <p class="card-title" id="totalClientes">0</p>
                     </div>
                   </div>
                 </div>
@@ -192,7 +171,7 @@ Coded by www.creative-tim.com
                 <hr>
                 <div class="stats">
                   <i class="fa fa-refresh"></i>
-                  Update Now
+                  Actualizado
                 </div>
               </div>
             </div>
@@ -203,13 +182,13 @@ Coded by www.creative-tim.com
                 <div class="row">
                   <div class="col-5 col-md-4">
                     <div class="icon-big text-center icon-warning">
-                      <i class="nc-icon nc-money-coins text-success"></i>
+                      <i class="nc-icon nc-bank text-success"></i>
                     </div>
                   </div>
                   <div class="col-7 col-md-8">
                     <div class="numbers">
-                      <p class="card-category">Revenue</p>
-                      <p class="card-title">$ 1,345<p>
+                      <p class="card-category">Total Préstamos</p>
+                      <p class="card-title" id="totalPrestamos">0</p>
                     </div>
                   </div>
                 </div>
@@ -218,7 +197,7 @@ Coded by www.creative-tim.com
                 <hr>
                 <div class="stats">
                   <i class="fa fa-calendar-o"></i>
-                  Last day
+                  Activos
                 </div>
               </div>
             </div>
@@ -229,13 +208,13 @@ Coded by www.creative-tim.com
                 <div class="row">
                   <div class="col-5 col-md-4">
                     <div class="icon-big text-center icon-warning">
-                      <i class="nc-icon nc-vector text-danger"></i>
+                      <i class="nc-icon nc-money-coins text-warning"></i>
                     </div>
                   </div>
                   <div class="col-7 col-md-8">
                     <div class="numbers">
-                      <p class="card-category">Errors</p>
-                      <p class="card-title">23<p>
+                      <p class="card-category">Total Pagos</p>
+                      <p class="card-title" id="totalPagos">0</p>
                     </div>
                   </div>
                 </div>
@@ -244,7 +223,7 @@ Coded by www.creative-tim.com
                 <hr>
                 <div class="stats">
                   <i class="fa fa-clock-o"></i>
-                  In the last hour
+                  Registrados
                 </div>
               </div>
             </div>
@@ -255,13 +234,13 @@ Coded by www.creative-tim.com
                 <div class="row">
                   <div class="col-5 col-md-4">
                     <div class="icon-big text-center icon-warning">
-                      <i class="nc-icon nc-favourite-28 text-primary"></i>
+                      <i class="nc-icon nc-chart-bar-32 text-danger"></i>
                     </div>
                   </div>
                   <div class="col-7 col-md-8">
                     <div class="numbers">
-                      <p class="card-category">Followers</p>
-                      <p class="card-title">+45K<p>
+                      <p class="card-category">Monto Total Prestado</p>
+                      <p class="card-title" id="montoTotal">$0</p>
                     </div>
                   </div>
                 </div>
@@ -270,7 +249,7 @@ Coded by www.creative-tim.com
                 <hr>
                 <div class="stats">
                   <i class="fa fa-refresh"></i>
-                  Update now
+                  Actualizado
                 </div>
               </div>
             </div>
@@ -278,64 +257,79 @@ Coded by www.creative-tim.com
         </div>
         <div class="row">
           <div class="col-md-12">
-            <div class="card ">
-              <div class="card-header ">
-                <h5 class="card-title">Users Behavior</h5>
-                <p class="card-category">24 Hours performance</p>
+            <div class="card">
+              <div class="card-header">
+                <h5 class="card-title">Préstamos Recientes</h5>
+                <p class="card-category">Últimos préstamos registrados</p>
+                <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addLoanModal">Agregar Préstamo</button>
               </div>
-              <div class="card-body ">
-                <canvas id=chartHours width="400" height="100"></canvas>
-              </div>
-              <div class="card-footer ">
-                <hr>
-                <div class="stats">
-                  <i class="fa fa-history"></i> Updated 3 minutes ago
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table">
+                    <thead class="text-primary">
+                      <tr>
+                        <th>Cliente</th>
+                        <th>Capital</th>
+                        <th>Plazo</th>
+                        <th>Tasa</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                      </tr>
+                    </thead>
+                    <tbody id="loansTable">
+                      <!-- Loans will be loaded here -->
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </div>
           </div>
         </div>
         <div class="row">
-          <div class="col-md-4">
-            <div class="card ">
-              <div class="card-header ">
-                <h5 class="card-title">Email Statistics</h5>
-                <p class="card-category">Last Campaign Performance</p>
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="card-title">Clientes</h5>
+                <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#addClientModal">Agregar Cliente</button>
               </div>
-              <div class="card-body ">
-                <canvas id="chartEmail"></canvas>
-              </div>
-              <div class="card-footer ">
-                <div class="legend">
-                  <i class="fa fa-circle text-primary"></i> Opened
-                  <i class="fa fa-circle text-warning"></i> Read
-                  <i class="fa fa-circle text-danger"></i> Deleted
-                  <i class="fa fa-circle text-gray"></i> Unopened
-                </div>
-                <hr>
-                <div class="stats">
-                  <i class="fa fa-calendar"></i> Number of emails sent
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table">
+                    <thead class="text-primary">
+                      <tr>
+                        <th>Nombre</th>
+                        <th>Teléfono</th>
+                        <th>Email</th>
+                      </tr>
+                    </thead>
+                    <tbody id="clientsTable">
+                      <!-- Clients will be loaded here -->
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </div>
           </div>
-          <div class="col-md-8">
-            <div class="card card-chart">
+          <div class="col-md-6">
+            <div class="card">
               <div class="card-header">
-                <h5 class="card-title">NASDAQ: AAPL</h5>
-                <p class="card-category">Line Chart with Points</p>
+                <h5 class="card-title">Pagos Recientes</h5>
+                <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#addPaymentModal">Registrar Pago</button>
               </div>
               <div class="card-body">
-                <canvas id="speedChart" width="400" height="100"></canvas>
-              </div>
-              <div class="card-footer">
-                <div class="chart-legend">
-                  <i class="fa fa-circle text-info"></i> Tesla Model S
-                  <i class="fa fa-circle text-warning"></i> BMW 5 Series
-                </div>
-                <hr />
-                <div class="card-stats">
-                  <i class="fa fa-check"></i> Data information certified
+                <div class="table-responsive">
+                  <table class="table">
+                    <thead class="text-primary">
+                      <tr>
+                        <th>Préstamo</th>
+                        <th>Monto</th>
+                        <th>Fecha</th>
+                      </tr>
+                    </thead>
+                    <tbody id="paymentsTable">
+                      <!-- Payments will be loaded here -->
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </div>

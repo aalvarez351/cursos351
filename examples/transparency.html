@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
+  <link rel="icon" type="image/png" href="../assets/img/favicon.png">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <title>Transparencia Total - Sistema de Préstamos</title>
+  <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
+  <link href="../assets/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="../assets/css/paper-dashboard.css?v=2.0.1" rel="stylesheet" />
+  <link href="../assets/demo/demo.css" rel="stylesheet" />
+</head>
+<body class="">
+  <div class="wrapper ">
+    <div class="sidebar" data-color="white" data-active-color="danger">
+      <div class="logo">
+        <a href="#" class="simple-text logo-mini">
+          <div class="logo-image-small">
+            <img src="../assets/img/logo-small.png">
+          </div>
+        </a>
+        <a href="#" class="simple-text logo-normal">
+          Sistema de Préstamos
+        </a>
+      </div>
+      <div class="sidebar-wrapper">
+        <ul class="nav">
+          <li>
+            <a href="./dashboard.html">
+              <i class="nc-icon nc-bank"></i>
+              <p>Dashboard</p>
+            </a>
+          </li>
+          <li class="active">
+            <a href="./transparency.html">
+              <i class="nc-icon nc-single-copy-04"></i>
+              <p>Transparencia</p>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="main-panel">
+      <nav class="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent">
+        <div class="container-fluid">
+          <div class="navbar-wrapper">
+            <div class="navbar-toggle">
+              <button type="button" class="navbar-toggler">
+                <span class="navbar-toggler-bar bar1"></span>
+                <span class="navbar-toggler-bar bar2"></span>
+                <span class="navbar-toggler-bar bar3"></span>
+              </button>
+            </div>
+            <a class="navbar-brand" href="javascript:;">Transparencia Total</a>
+          </div>
+        </div>
+      </nav>
+      <div class="content">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">
+                <h4 class="card-title">Transparencia Total</h4>
+                <p class="card-category">Entendiendo cómo funciona nuestro sistema de préstamos</p>
+              </div>
+              <div class="card-body">
+                <p>La confianza se construye con claridad. Aquí explicamos detalladamente nuestros procesos, fórmulas y manejo de datos.</p>
+                <h5>¿Por qué la Transparencia?</h5>
+                <p>En nuestro compromiso por generar confianza y seguridad en nuestros usuarios, hemos desarrollado este espacio donde explicamos de manera clara y detallada:</p>
+                <ul>
+                  <li>Cómo funciona el sistema completo de préstamos</li>
+                  <li>Las fórmulas matemáticas utilizadas en los cálculos</li>
+                  <li>La relación entre los datos y cómo se interconectan</li>
+                  <li>El flujo de información desde el registro hasta el pago final</li>
+                </ul>
+                <p>Creemos que la transparencia es fundamental para construir relaciones duraderas basadas en la confianza mutua.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">
+                <h4 class="card-title">Arquitectura del Sistema</h4>
+              </div>
+              <div class="card-body">
+                <h5>Componentes Principales:</h5>
+                <ul>
+                  <li><strong>Portal del Administrador:</strong> Registro y gestión de clientes, creación y administración de préstamos, registro manual de pagos, generación de reportes</li>
+                  <li><strong>Portal del Cliente:</strong> Visualización de préstamos activos, historial de pagos realizados, estado de cuenta en tiempo real, descarga de comprobantes</li>
+                  <li><strong>Base de Datos:</strong> Colecciones MongoDB para Clientes, Préstamos y Pagos</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">
+                <h4 class="card-title">Flujo de Datos</h4>
+              </div>
+              <div class="card-body">
+                <h5>Ciclo de Vida de un Préstamo:</h5>
+                <ol>
+                  <li>Registro del Cliente: Se recopilan datos personales</li>
+                  <li>Creación del Préstamo: Se define capital, plazo, tasa, etc.</li>
+                  <li>Registro de Pagos: El administrador registra pagos manualmente</li>
+                  <li>Cálculos Automáticos: El sistema calcula intereses, saldo, etc.</li>
+                  <li>Estado de Cuenta: El cliente visualiza en tiempo real</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">
+                <h4 class="card-title">Fórmulas Matemáticas</h4>
+              </div>
+              <div class="card-body">
+                <h5>Cálculos Principales:</h5>
+                <ul>
+                  <li><strong>Pago Esperado por Cuota:</strong> Pago Esperado = (Capital / Plazo) + Interés Programado</li>
+                  <li><strong>Interés Quincenal:</strong> Interés Quincenal = Capital × (Tasa de Interés / 100) × (1/24)</li>
+                  <li><strong>Saldo Actual:</strong> Saldo Actual = Capital Inicial - Σ(Abonos al capital)</li>
+                  <li><strong>Total Pagado:</strong> Total Pagado = Σ(Pagos)</li>
+                  <li><strong>Interés Acumulado:</strong> Interés Acumulado = Σ(Intereses Registrados)</li>
+                  <li><strong>Total a Pagar:</strong> Total a Pagar = Capital + Intereses + Atrasos</li>
+                  <li><strong>Diferencia:</strong> Diferencia = Total a Pagar - Total Pagado</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">
+                <h4 class="card-title">Relaciones de Datos</h4>
+              </div>
+              <div class="card-body">
+                <p><strong>Cliente → Préstamo:</strong> Un cliente puede tener múltiples préstamos</p>
+                <p><strong>Préstamo → Pagos:</strong> Un préstamo puede tener múltiples pagos</p>
+                <p><strong>Usuario → Acciones:</strong> Los administradores registran pagos y modifican datos</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">
+                <h4 class="card-title">Seguridad y Privacidad</h4>
+              </div>
+              <div class="card-body">
+                <ul>
+                  <li>Autenticación JWT</li>
+                  <li>Encriptación de contraseñas con bcrypt</li>
+                  <li>Control de acceso por roles</li>
+                  <li>Auditoría de acciones</li>
+                  <li>Validación de datos</li>
+                </ul>
+                <p><strong>Compromiso con la Transparencia:</strong> Publicamos este documento para que nuestros usuarios comprendan exactamente cómo operamos. La confianza se basa en la claridad, no en la opacidad.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <footer class="footer footer-black  footer-transparent ">
+        <div class="container-fluid">
+          <div class="row">
+            <nav class="footer-nav">
+              <ul>
+                <li><a href="#" target="_blank">Sistema de Préstamos</a></li>
+              </ul>
+            </nav>
+            <div class="credits ml-auto">
+              <span class="copyright">
+                © <script>document.write(new Date().getFullYear())</script>, made with <i class="fa fa-heart heart"></i> by Creative Tim
+              </span>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+  <script src="../assets/js/core/jquery.min.js"></script>
+  <script src="../assets/js/core/popper.min.js"></script>
+  <script src="../assets/js/core/bootstrap.min.js"></script>
+  <script src="../assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+  <script src="../assets/js/plugins/chartjs.min.js"></script>
+  <script src="../assets/js/plugins/bootstrap-notify.js"></script>
+  <script src="../assets/js/paper-dashboard.min.js?v=2.0.1"></script>
+</body>
+</html>
